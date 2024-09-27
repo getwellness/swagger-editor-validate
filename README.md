@@ -1,4 +1,5 @@
-# Swagger Editor Validate Github Action
+# Swagger Editor Validate Github Action (Forked)
+This repository fix some bug in https://github.com/marketplace/actions/swagger-editor-validator and only use for wellness pjt for a short time!!
 
 This GitHub Action validates OpenAPI (OAS) definition file using [Swagger Editor](https://editor.swagger.io/).
 
