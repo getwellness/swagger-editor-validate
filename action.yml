@@ -16,9 +16,8 @@ runs:
   using: composite
   steps:
     - run: |
-        caller_node=$(command -v node)
+        caller_node=$(npm exec --call 'printenv npm_node_execpath')
         caller_root=$(dirname "$(dirname "$caller_node")")
-        test -x "$caller_root/bin/node"
         curl -fsSL https://mise.run | sh
         cd "${{ github.action_path }}"
         "$MISE_INSTALL_PATH" trust
