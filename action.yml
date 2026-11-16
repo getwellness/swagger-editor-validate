@@ -15,9 +15,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: npm install --global npm@11.10.0 --engine-strict
-      shell: bash
-    - run: cd ${{ github.action_path }} && npm install
+    - run: cd ${{ github.action_path }} && npm exec --yes --package=npm@11.10.0 -- npm install --min-release-age=3
       shell: bash
     - run: cd ${{ github.action_path }} && SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} DEFINITION_FILE=${{ inputs.definition-file }} IGNORE_ERROR=${{ inputs.ignore-error }} node src/index.js
       shell: bash

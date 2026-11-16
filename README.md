@@ -2,7 +2,7 @@
 
 ## Dependency installation
 
-Use npm 11.10.0 on the existing caller Node runtime: Node 20 >=20.17.0, or Node >=22.9.0. Run `npm install --global npm@11.10.0 --engine-strict`, verify `npm --version`, then `npm ci`. The packageManager field alone does not switch shell npm. CI and this composite action bootstrap that exact npm without selecting a different Node; unsupported callers fail the engine check. The project `.npmrc` sets `min-release-age=3` (days) for fresh selections, not a promise to reject existing locked dependencies. CLI/environment overrides remain possible; global installs do not read project npmrc.
+Use npm 11.10.0 on the existing caller Node runtime: Node 20 >=20.17.0, or Node >=22.9.0. Run `npm install --global npm@11.10.0 --engine-strict`, verify `npm --version`, then `npm ci`. The packageManager field alone does not switch shell npm. CI bootstraps npm11.10.0 globally on its ephemeral runner. The composite instead uses scoped `npm exec --yes --package=npm@11.10.0 -- npm install --min-release-age=3` under its action directory, without changing the caller global prefix or Node. Unsupported caller engines remain an execution boundary. The project `.npmrc` sets `min-release-age=3` (days) for fresh selections, not a promise to reject existing locked dependencies. CLI/environment overrides remain possible; global installs do not read project npmrc.
 This repository fix some bug in https://github.com/marketplace/actions/swagger-editor-validator and only use for wellness pjt for a short time!!
 
 This GitHub Action validates OpenAPI (OAS) definition file using [Swagger Editor](https://editor.swagger.io/).
