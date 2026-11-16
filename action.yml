@@ -15,7 +15,22 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: cd ${{ github.action_path }} && npm exec --yes --package=npm@11.10.0 -- npm install --min-release-age=3
+    - run: |
+        caller_node=$(command -v node)
+        caller_root=$(dirname "$(dirname "$caller_node")")
+        test -x "$caller_root/bin/node"
+        curl -fsSL https://mise.run | sh
+        cd "${{ github.action_path }}"
+        "$MISE_INSTALL_PATH" trust
+        "$MISE_INSTALL_PATH" exec --locked "node@path:$caller_root" npm@11.10.0 -- npm install --min-release-age=3
+      env:
+        MISE_INSTALL_PATH: ${{ runner.temp }}/swagger-editor-validate-mise/bin/mise
+        MISE_CONFIG_DIR: ${{ runner.temp }}/swagger-editor-validate-mise/config
+        MISE_DATA_DIR: ${{ runner.temp }}/swagger-editor-validate-mise/data
+        MISE_CACHE_DIR: ${{ runner.temp }}/swagger-editor-validate-mise/cache
+        MISE_STATE_DIR: ${{ runner.temp }}/swagger-editor-validate-mise/state
+        MISE_SELF_UPDATE_MINIMUM_RELEASE_AGE: 3d
+        MISE_MINIMUM_RELEASE_AGE: 3d
       shell: bash
     - run: cd ${{ github.action_path }} && SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} DEFINITION_FILE=${{ inputs.definition-file }} IGNORE_ERROR=${{ inputs.ignore-error }} node src/index.js
       shell: bash
