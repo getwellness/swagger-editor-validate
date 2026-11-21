@@ -1,4 +1,9 @@
 # Swagger Editor Validate Github Action (Forked)
+
+## Dependency installation
+
+Run `mise trust`, `mise install --locked`, then `mise exec -- npm ci` with Node 20 and npm 11.10.0. The reusable action installs dependencies with npm 11.10.0 without changing the caller's Node selection. Caller Node must support npm 11.10.0 (20.17+ on Node 20, 22.9+ on Node 22, or newer supported versions). The three-day cutoff applies to fresh resolutions, not dependencies already locked.
+
 This repository fix some bug in https://github.com/marketplace/actions/swagger-editor-validator and only use for wellness pjt for a short time!!
 
 This GitHub Action validates OpenAPI (OAS) definition file using [Swagger Editor](https://editor.swagger.io/).

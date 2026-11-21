@@ -1,0 +1,9 @@
+[tools]
+node = "20"
+npm = "11.10.0"
+
+[settings]
+experimental = true
+lockfile = true
+lockfile_platforms = ["linux-x64", "macos-arm64"]
+minimum_release_age = "3d"
