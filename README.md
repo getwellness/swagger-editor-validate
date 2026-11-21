@@ -2,7 +2,8 @@
 
 ## Dependency installation
 
-For repository development and CI, use the shared mise.toml/mise.lock: `mise trust`, `mise install --locked`, then `mise exec -- npm ci`. The shared tools select the existing Node20 family and npm11.10.0; packageManager/engines remain compatibility metadata. The reusable composite obtains npm's actual child Node executable through `npm exec --call 'printenv npm_node_execpath'`, including shim/non-bin callers, and uses its existing runtime prefix with native `node@path:` selection and registered npm11.10.0 under action-private mise state. The official installer keeps dynamic three-day release selection. Only the install child receives this tool environment; later caller Node execution is unchanged, with no GITHUB_PATH or global-prefix mutation. Caller Node must support npm11.10.0 (20 >=20.17.0 or >=22.9.0). Project `.npmrc` retains three-day age for fresh selections, not retroactive locked-dependency rejection. CLI/environment overrides remain possible; global installs do not read project npmrc.
+Run `mise trust`, `mise install --locked`, then `mise exec -- npm ci` with Node 20 and npm 11.10.0. The reusable action installs dependencies with npm 11.10.0 without changing the caller's Node selection. Caller Node must support npm 11.10.0 (20.17+ on Node 20, 22.9+ on Node 22, or newer supported versions). The three-day cutoff applies to fresh resolutions, not dependencies already locked.
+
 This repository fix some bug in https://github.com/marketplace/actions/swagger-editor-validator and only use for wellness pjt for a short time!!
 
 This GitHub Action validates OpenAPI (OAS) definition file using [Swagger Editor](https://editor.swagger.io/).
