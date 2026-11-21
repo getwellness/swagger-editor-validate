@@ -12,7 +12,7 @@ jobs:
     name: Swagger Editor Validate - Repo integrity
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - uses: jdx/mise-action@v5
         with:
           auto_update: true
@@ -36,9 +36,9 @@ jobs:
           - 80:8080
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Validate OpenAPI definition
-        uses: swaggerexpert/swagger-editor-validate@master
+        uses: swaggerexpert/swagger-editor-validate@v1
         with:
           swagger-editor-url: http://localhost/
           definition-file: examples/openapi-2-0.yaml
@@ -48,9 +48,9 @@ jobs:
     name: Swagger Editor Validate Remote
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Validate OpenAPI definition
-        uses: swaggerexpert/swagger-editor-validate@master
+        uses: swaggerexpert/swagger-editor-validate@v1
         with:
           definition-file: examples/openapi-2-0.yaml
 
@@ -59,11 +59,11 @@ jobs:
     name: Swagger Editor Validate
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Validate OpenAPI definition
         continue-on-error: true
         id: validate
-        uses: swaggerexpert/swagger-editor-validate@master
+        uses: swaggerexpert/swagger-editor-validate@v1
         with:
           definition-file: examples/openapi-2-0-error.yaml
       - name: Check for failure
@@ -78,9 +78,9 @@ jobs:
     name: Swagger Editor Ignore Errors
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - name: Validate OpenAPI definition
-        uses: swaggerexpert/swagger-editor-validate@master
+        uses: swaggerexpert/swagger-editor-validate@v1
         with:
           definition-file: examples/openapi-2-0-error.yaml
           ignore-error: examples/ignore-error.js
