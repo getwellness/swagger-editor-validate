@@ -4,7 +4,6 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
 
 jobs:
   test_github_action:
@@ -25,62 +24,111 @@ jobs:
     runs-on: ubuntu-latest
     name: Swagger Editor Validate Service
 
-    # Service containers to run with `runner-job`
     services:
-      # Label used to access the service container
       swagger-editor:
-        # Docker Hub image
-        image: swaggerapi/swagger-editor
+        image: swaggerapi/swagger-editor:v4-latest
         ports:
-          # Maps port 8080 on service container to the host 80
-          - 80:8080
+          - 127.0.0.1:8080:8080
 
     steps:
       - uses: actions/checkout@v7
-      - name: Validate OpenAPI definition
-        uses: swaggerexpert/swagger-editor-validate@master
+      - uses: jdx/mise-action@v5
         with:
-          swagger-editor-url: http://localhost/
+          auto_update: true
+          minimum_release_age: 3d
+      - name: Wait for Swagger Editor
+        run: >-
+          curl -fsS --retry 5 --retry-connrefused --retry-all-errors
+          --max-time 3 --retry-max-time 12 -o /dev/null http://127.0.0.1:8080/
+      - name: Validate OpenAPI definition
+        uses: ./
+        with:
+          swagger-editor-url: http://127.0.0.1:8080/
           definition-file: examples/openapi-2-0.yaml
 
   test_swagger_editor_validate_remote:
     runs-on: ubuntu-latest
     name: Swagger Editor Validate Remote
 
+    services:
+      swagger-editor:
+        image: swaggerapi/swagger-editor:v4-latest
+        ports:
+          - 127.0.0.1:8080:8080
+
     steps:
       - uses: actions/checkout@v7
-      - name: Validate OpenAPI definition
-        uses: swaggerexpert/swagger-editor-validate@master
+      - uses: jdx/mise-action@v5
         with:
+          auto_update: true
+          minimum_release_age: 3d
+      - name: Wait for Swagger Editor
+        run: >-
+          curl -fsS --retry 5 --retry-connrefused --retry-all-errors
+          --max-time 3 --retry-max-time 12 -o /dev/null http://127.0.0.1:8080/
+      - name: Validate OpenAPI definition
+        uses: ./
+        with:
+          swagger-editor-url: http://127.0.0.1:8080/
           definition-file: examples/openapi-2-0.yaml
 
   test_swagger_editor_error:
     runs-on: ubuntu-latest
     name: Swagger Editor Validate
 
+    services:
+      swagger-editor:
+        image: swaggerapi/swagger-editor:v4-latest
+        ports:
+          - 127.0.0.1:8080:8080
+
     steps:
       - uses: actions/checkout@v7
-      - name: Validate OpenAPI definition
-        continue-on-error: true
-        id: validate
-        uses: swaggerexpert/swagger-editor-validate@master
+      - uses: jdx/mise-action@v5
         with:
-          definition-file: examples/openapi-2-0-error.yaml
-      - name: Check for failure
-        if: steps.validate.outcome != 'failure'
-        run: exit 1
-      - name: Check for error message
-        if: ${{ !contains('Definition contains errors', steps.validate.outputs.stdout.contains) }}
-        run: exit 1
+          auto_update: true
+          minimum_release_age: 3d
+      - run: npm ci
+      - name: Wait for Swagger Editor
+        run: >-
+          curl -fsS --retry 5 --retry-connrefused --retry-all-errors
+          --max-time 3 --retry-max-time 12 -o /dev/null http://127.0.0.1:8080/
+      - name: Reject invalid OpenAPI definition
+        shell: bash
+        env:
+          SWAGGER_EDITOR_URL: http://127.0.0.1:8080/
+          DEFINITION_FILE: examples/openapi-2-0-error.yaml
+        run: |
+          status=0
+          output=$(node src/index.js 2>&1) || status=$?
+          printf '%s\n' "$output"
+          test "$status" -eq 1
+          grep -Fq 'Definition contains errors' <<< "$output"
+          grep -Fq 'additionalProperty: contact1' <<< "$output"
 
   test_swagger_editor_ignore_error:
     runs-on: ubuntu-latest
     name: Swagger Editor Ignore Errors
 
+    services:
+      swagger-editor:
+        image: swaggerapi/swagger-editor:v4-latest
+        ports:
+          - 127.0.0.1:8080:8080
+
     steps:
       - uses: actions/checkout@v7
-      - name: Validate OpenAPI definition
-        uses: swaggerexpert/swagger-editor-validate@master
+      - uses: jdx/mise-action@v5
         with:
+          auto_update: true
+          minimum_release_age: 3d
+      - name: Wait for Swagger Editor
+        run: >-
+          curl -fsS --retry 5 --retry-connrefused --retry-all-errors
+          --max-time 3 --retry-max-time 12 -o /dev/null http://127.0.0.1:8080/
+      - name: Validate OpenAPI definition
+        uses: ./
+        with:
+          swagger-editor-url: http://127.0.0.1:8080/
           definition-file: examples/openapi-2-0-error.yaml
           ignore-error: examples/ignore-error.js
