@@ -26,7 +26,7 @@ jobs:
 
     services:
       swagger-editor:
-        image: swaggerapi/swagger-editor:v4.14.8
+        image: swaggerapi/swagger-editor:v4
         ports:
           - 127.0.0.1:8080:8080
 
@@ -52,7 +52,7 @@ jobs:
 
     services:
       swagger-editor:
-        image: swaggerapi/swagger-editor:v4.14.8
+        image: swaggerapi/swagger-editor:v4
         ports:
           - 127.0.0.1:8080:8080
 
@@ -78,7 +78,7 @@ jobs:
 
     services:
       swagger-editor:
-        image: swaggerapi/swagger-editor:v4.14.8
+        image: swaggerapi/swagger-editor:v4
         ports:
           - 127.0.0.1:8080:8080
 
@@ -112,7 +112,7 @@ jobs:
 
     services:
       swagger-editor:
-        image: swaggerapi/swagger-editor:v4.14.8
+        image: swaggerapi/swagger-editor:v4
         ports:
           - 127.0.0.1:8080:8080
 
