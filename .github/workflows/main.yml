@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, chore/dependency-age-3d-t_a2e7bab7 ]
 
 jobs:
   test_github_action:
