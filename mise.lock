@@ -18,7 +18,7 @@ url = "https://nodejs.org/dist/v24.22.3/node-v24.22.3-darwin-arm64.tar.gz"
 [[tools.npm]]
 version = "11.10.0"
 backend = "aqua:npm/cli"
-specifiers = ["11.10.0"]
+specifiers = ["11"]
 
 [tools.npm."platforms.linux-x64"]
 checksum = "sha256:43c653384c39617756846ad405705061a78fb6bbddb2ced57ab79fb92e8af2a7"
