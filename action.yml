@@ -15,6 +15,11 @@ inputs:
 runs:
   using: composite
   steps:
+    - uses: jdx/mise-action@v5
+      with:
+        auto_update: true
+        minimum_release_age: 3d
+        working_directory: ${{ github.action_path }}
     - run: cd ${{ github.action_path }} && npm install
       shell: bash
     - run: cd ${{ github.action_path }} && SWAGGER_EDITOR_URL=${{ inputs.swagger-editor-url }} DEFINITION_FILE=${{ inputs.definition-file }} IGNORE_ERROR=${{ inputs.ignore-error }} node src/index.js
