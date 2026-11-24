@@ -1,6 +1,6 @@
 [tools]
 node = "24"
-npm = "11.10.0"
+npm = "11"
 
 [settings]
 experimental = true
