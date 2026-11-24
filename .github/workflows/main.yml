@@ -4,7 +4,6 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master, chore/dependency-age-3d-t_a2e7bab7 ]
 
 jobs:
   test_github_action:
@@ -51,11 +50,26 @@ jobs:
     runs-on: ubuntu-latest
     name: Swagger Editor Validate Remote
 
+    services:
+      swagger-editor:
+        image: swaggerapi/swagger-editor:v4.14.8
+        ports:
+          - 127.0.0.1:8080:8080
+
     steps:
       - uses: actions/checkout@v7
-      - name: Validate OpenAPI definition
-        uses: swaggerexpert/swagger-editor-validate@master
+      - uses: jdx/mise-action@v5
         with:
+          auto_update: true
+          minimum_release_age: 3d
+      - name: Wait for Swagger Editor
+        run: >-
+          curl -fsS --retry 5 --retry-connrefused --retry-all-errors
+          --max-time 3 --retry-max-time 12 -o /dev/null http://127.0.0.1:8080/
+      - name: Validate OpenAPI definition
+        uses: ./
+        with:
+          swagger-editor-url: http://127.0.0.1:8080/
           definition-file: examples/openapi-2-0.yaml
 
   test_swagger_editor_error:
@@ -96,10 +110,25 @@ jobs:
     runs-on: ubuntu-latest
     name: Swagger Editor Ignore Errors
 
+    services:
+      swagger-editor:
+        image: swaggerapi/swagger-editor:v4.14.8
+        ports:
+          - 127.0.0.1:8080:8080
+
     steps:
       - uses: actions/checkout@v7
-      - name: Validate OpenAPI definition
-        uses: swaggerexpert/swagger-editor-validate@master
+      - uses: jdx/mise-action@v5
         with:
+          auto_update: true
+          minimum_release_age: 3d
+      - name: Wait for Swagger Editor
+        run: >-
+          curl -fsS --retry 5 --retry-connrefused --retry-all-errors
+          --max-time 3 --retry-max-time 12 -o /dev/null http://127.0.0.1:8080/
+      - name: Validate OpenAPI definition
+        uses: ./
+        with:
+          swagger-editor-url: http://127.0.0.1:8080/
           definition-file: examples/openapi-2-0-error.yaml
           ignore-error: examples/ignore-error.js
